@@ -29,6 +29,7 @@ app.use('/api', async (req, res) => {
 
 
 const db = mysql.createConnection({
+  port: process.env.DB_PORT,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -50,6 +51,18 @@ app.post('/users', (req, res) => {
     if (err) return res.json(err);
     return res.json({ message: 'User added successfully', data: result });
   });
+});
+
+app.get('/users', (req, res) => {
+  const sql = 'SELECT * FROM users'; // Modify this based on your actual table structure
+  db.query(sql, (err, result) => {
+    if (err) return res.json(err);
+    return res.json(result);  // Return the list of users as JSON
+  });
+});
+
+app.get('/', function(req, res, next) {
+  res.send("Hello world");
 });
 
 app.listen(5000, () => {
