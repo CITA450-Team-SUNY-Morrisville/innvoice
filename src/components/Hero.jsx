@@ -15,6 +15,10 @@ const hero = () => {
           <p className="my-4 text-xl text-white">
             Do something here.
           </p>
+          <br></br>
+          <p className="my-4 text-xl text-white">
+            I've done something here :V
+          </p>
         </div>
       </div>
     </section>
