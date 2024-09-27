@@ -53,7 +53,7 @@ app.post('/users', (req, res) => {
   });
 });
 
-app.get('/users', (req, res) => {
+app.get('/database/users', (req, res) => {
   const sql = 'SELECT * FROM users'; // Modify this based on your actual table structure
   db.query(sql, (err, result) => {
     if (err) return res.json(err);
@@ -61,10 +61,10 @@ app.get('/users', (req, res) => {
   });
 });
 
-app.get('/', function(req, res, next) {
+app.get('/database', function(req, res, next) {
   res.send("Hello world");
 });
 
-app.listen(5000, () => {
+app.listen(8080, () => {
   console.log('Listening...');
 });
