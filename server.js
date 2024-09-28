@@ -44,7 +44,7 @@ app.get('/users', (req, res) => {
   });
 });
 
-app.get('/github/deploy', () => {
+app.post('/github/deploy', (req, res) => {
   if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git');
     res.send('No git found');
