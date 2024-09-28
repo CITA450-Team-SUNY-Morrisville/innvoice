@@ -47,12 +47,14 @@ app.get('/users', (req, res) => {
 app.get('/github/deploy', () => {
   if (!shell.which('git')) {
     shell.echo('Sorry, this script requires git');
-    return;
+    res.send('No git found');
   }
 
   if (shell.exec('git pull').code !== 0) {
     shell.echo('Error: Git pull failed');
+    res.send('Pull failed');
   }
+  res.send('Successfully pulled');
 });
 
 // No point displaying this page
