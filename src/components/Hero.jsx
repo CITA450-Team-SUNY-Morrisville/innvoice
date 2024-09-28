@@ -17,7 +17,7 @@ const hero = () => {
           </p>
           <br></br>
           <p className="my-4 text-xl text-white">
-            I've done something here :V
+            I've done something here again :V
           </p>
         </div>
       </div>

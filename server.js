@@ -23,7 +23,7 @@ connection.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
   } else {
-    console.log('Connected to the database as ID: ' + connection.threadID);
+    console.log('Connected to the database as ID: ' + connection.threadId);
   }
 });
 
