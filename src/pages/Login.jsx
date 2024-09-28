@@ -9,7 +9,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/users', { email, password });
+      const response = await axios.post('https://db.davexx.com/users', { email, password });
       setMessage(response.data.message);
     } catch (error) {
       console.error('There was an error inserting the data!', error);
