@@ -1,70 +1,65 @@
+// server.js
 import express from 'express';
-import mysql from 'mysql2';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const app = express();
+const port = 3001;
+
+// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.use('/api', async (req, res) => {
+// MySQL connection
+const connectToDatabase = async () => {
+  return await mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  });
+};
+
+// Route to get data from the signup table
+app.get('/signup', async (req, res) => {
   try {
-    const url = `https://auth-db1626.hstgr.io/index.php?route=/sql&pos=0&db=u975527283_Freelancer&table=`;
-    const response = await axios({
-      method: req.method,
-      url,
-      headers: { ...req.headers },  // Forward headers from the client
-      data: req.body,  // Forward the request body
-    });
-    res.json(response.data);
-  } catch (err) {
-    console.error('Error in proxy:', err.message);
-    res.status(err.response?.status || 500).json({ message: err.message });
+    const connection = await connectToDatabase();
+    const [rows] = await connection.execute('SELECT * FROM signup');
+    connection.end();
+
+    res.status(200).json(rows);  // Return the rows as JSON
+  } catch (error) {
+    console.error('Error fetching data from the database:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
+// Route for user signup (inserts data into the database)
+app.post('/signup', async (req, res) => {
+  const { username, email, password } = req.body;
 
-const db = mysql.createConnection({
-  port: process.env.DB_PORT,
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Connected to the database.');
+  try {
+    const connection = await connectToDatabase();
+    const query = 'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)';
+    await connection.execute(query, [username, email, password]);
+
+    connection.end();
+    res.status(201).json({ message: 'User signed up successfully!' });
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-app.post('/users', (req, res) => {
-  const { email, password } = req.body;
-  const sql = 'INSERT INTO users (email, password) VALUES (?, ?)';
-  db.query(sql, [email, password], (err, result) => {
-    if (err) return res.json(err);
-    return res.json({ message: 'User added successfully', data: result });
-  });
-});
-
-app.get('/database/users', (req, res) => {
-  const sql = 'SELECT * FROM users'; // Modify this based on your actual table structure
-  db.query(sql, (err, result) => {
-    if (err) return res.json(err);
-    return res.json(result);  // Return the list of users as JSON
-  });
-});
-
-app.get('/database', function(req, res, next) {
-  res.send("Hello world");
-});
-
-app.listen(8080, () => {
-  console.log('Listening...');
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

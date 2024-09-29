@@ -3,13 +3,13 @@ import React from 'react'
 import MainLayout from './layouts/MainLayout'
 import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
-import LoginPage from './pages/Login'
+import SignupPage from './pages/Signup'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<MainLayout />}>
       <Route index element={<HomePage />}/>
-      <Route path='/Login' element={<LoginPage />}/>
+      <Route path='/Signup' element={<SignupPage />}/>
       <Route path='*' element={<NotFoundPage />}/>
     </Route>
 )

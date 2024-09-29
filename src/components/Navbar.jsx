@@ -24,7 +24,7 @@ const Navbar = () => {
             <div className="md:ml-auto">
               <div className="flex space-x-2">
                 <Link
-                  to="/login"
+                  to="/Signup"
                   className="text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
                   >Login</Link>
               </div>
