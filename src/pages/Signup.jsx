@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -129,9 +130,9 @@ function Signup() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{' '}
-          <a href="/login" className="text-indigo-600 hover:text-indigo-500">
+          <Link to="/login" className="text-indigo-600 hover:text-indigo-500">
             Log in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
