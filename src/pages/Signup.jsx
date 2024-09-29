@@ -1,10 +1,7 @@
-// src/signup.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 
-function Signup() {
+const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -12,7 +9,6 @@ function Signup() {
   });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,119 +20,99 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage('');
-    setError('');
-
     try {
-      const response = await axios.post('/api/signup', formData);
-      setMessage(response.data.message);
-      setFormData({ username: '', email: '', password: '' });
+      const response = await axios.post('/signup', formData);
+      setMessage('🎉 Registration successful! Welcome to the platform. We’re excited to have you! 🎉');
+      setError(''); // Reset error
     } catch (error) {
-      setError('Error occurred during signup.');
-    } finally {
-      setLoading(false);
+      console.error('Error during sign-up:', error);
+      setError('⚠️ Registration failed. Please try again later.');
+      setMessage(''); // Reset success message
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-          Create an Account
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 to-blue-600">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
+        <h1 className="text-3xl font-bold text-center text-gray-800">Create Your Account</h1>
+        <p className="text-center text-gray-500">
+          Join us and start your journey today.
+        </p>
+        
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
             <input
               type="text"
               name="username"
+              id="username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
               placeholder="Enter your username"
               required
             />
           </div>
+
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               name="email"
+              id="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter your email"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="you@example.com"
               required
             />
           </div>
+
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               name="password"
+              id="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
               placeholder="Create a password"
               required
             />
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold flex items-center justify-center"
-            disabled={loading}
-          >
-            {loading ? (
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                ></path>
-              </svg>
-            ) : (
-              'Sign Up'
-            )}
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-4 rounded-lg hover:bg-gradient-to-l focus:ring-4 focus:ring-blue-300 transition duration-300">
+            Sign Up
           </button>
         </form>
 
+        {/* Success Message */}
         {message && (
-          <div className="mt-6 bg-green-100 border border-green-300 text-green-700 p-4 rounded-lg flex items-center">
-            <FiCheckCircle className="text-green-600 w-6 h-6 mr-2" />
-            <span>{message}</span>
+          <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+            <strong>{message}</strong>
           </div>
         )}
 
+        {/* Error Message */}
         {error && (
-          <div className="mt-6 bg-red-100 border border-red-300 text-red-700 p-4 rounded-lg flex items-center">
-            <FiAlertCircle className="text-red-600 w-6 h-6 mr-2" />
-            <span>{error}</span>
+          <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+            <strong>{error}</strong>
           </div>
         )}
-
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 hover:text-indigo-500">
-            Log in
-          </Link>
-        </p>
       </div>
     </div>
   );
-}
+};
 
 export default Signup;
