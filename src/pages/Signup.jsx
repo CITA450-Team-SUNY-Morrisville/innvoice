@@ -21,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/signup', formData);
+      const response = await axios.post('/routes/users/signup', formData);
       setMessage('🎉 Registration successful! Welcome to the platform. We’re excited to have you! 🎉');
       setError(''); // Reset error
     } catch (error) {

@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/signup': {
+      '/routes': {
         target: 'http://localhost:3000', // Proxy requests to your Node.js backend
         changeOrigin: true,
       },
