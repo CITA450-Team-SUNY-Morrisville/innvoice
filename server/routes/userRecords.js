@@ -44,6 +44,8 @@ router.post('/signup', async (req, res) => {
     //     }
     // });
 
+    console.log('fuck you jmac!!!!!!!!!!');
+
     try {
         const query = 'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)';
         // use hash instead of password
