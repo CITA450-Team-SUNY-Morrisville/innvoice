@@ -56,7 +56,7 @@ router.post('/signup', async (req, res) => {
 });
   
   // GET /signup route - to fetch all users
-  router.get('/signup', async (req, res) => {
+  router.get('/records', async (req, res) => {
     try {
       const [results] = await pool.query('SELECT * FROM signup');
       res.status(200).json(results); // Return all users as JSON
