@@ -1,5 +1,7 @@
 import express from "express";
 import bcrypt from 'bcrypt';
+// Authentication with tokens
+import jwt from 'jsonwebtoken';
 
 const saltRounds = 10;
 var hashedPass;
@@ -20,32 +22,38 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // bcrypt.genSalt(saltRounds, (err, salt) => {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+    //, (err, salt));
+    //  => {
     //     if (err) {
     //         // Handle error
     //         console.log("Error generating password salting");
     //         return;
     //     }
-    //     bcrypt.hash('password', salt, (err, hash) => {
-    //         if (err) {
-    //             // Handle error.
-    //             console.log("password hash failed, contact Alex asap");
-    //             res.status(500).json({ message: 'Password hashing failed' });
-    //             return;
-    //         }
+    // });
 
-    //     });
+    //const hash = await bcrypt.hash('password', salt)
+    //, (err, hash));
+    //  => {
+    //     if (err) {
+    //         // Handle error.
+    //         console.log("password hash failed, contact Alex asap");
+    //         res.status(500).json({ message: 'Password hashing failed' });
+    //         return;
+    //     }
+    // });
 
-        try {
-            const query = 'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)';
-            // use hash instead of password
-            const [results] = await pool.query(query, [username, email, password]);
-            res.status(201).json({ message: 'User signed up successfully', userId: results.insertId });
-          } catch (err) {
-            console.error('Error inserting into signup table:', err);
-            res.status(500).json({ message: 'Database error' });
-          }
-    });
+    try {
+        const query = 'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)';
+        // use hash instead of password
+        const [results] = await pool.query(query, [username, email, hash]);
+        res.status(201).json({ message: 'User signed up successfully', userId: results.insertId });
+    } catch (err) {
+        console.error('Error inserting into signup table:', err);
+        res.status(500).json({ message: 'Database error' });
+    }
+});
   
   // GET /signup route - to fetch all users
   router.get('/signup', async (req, res) => {
@@ -62,32 +70,35 @@ router.post('/signup', async (req, res) => {
   router.post('/login', async (req, res) => {
     const { username, email, password } = req.body;
     try {
-        const query = 'SELECT password WHERE username = ? OR email = ?'
+        const query = 'SELECT password FROM signup WHERE username = ? OR email = ?'
         const [rows] = await pool.query(query, [username, email]);
 
+        var passwordHash;
+
+        // Check if a row was returned
+        if (rows.length > 0) {
+            passwordHash = rows[0].password; // Get the 'password' field from the first row
+            console.log('Password hash:', passwordHash);
+
+            // Use passwordHash for further processing, such as verifying the password
+        } else {
+            console.log('No user found with the provided username or email');
+        }
+
         // Compare the passwords.
-        bcrypt.compare(password, rows.map((rows) => { return rows.password }), (err, result) => {
-            if (err) {
-                // Handle error
-                console.error('Error comparing passwords: ', err);
-                res.status(500).json({ message: 'Error comparing passwords, please try again later.' });
-                return;
-            }
-        
-        if (result) {
+        if (await bcrypt.compare(password, passwordHash)) {
             // Passwords match, authentication successful
 
-            // Do authentication stuff here.
-            // maybe soemthing with the response to show it beign done and to run code on a login.jsx for instance.
-            // Autually do stuff with cookies or tokens
+            // Do authentication stuff here
+            // Do stuff with cookies or tokens
 
             console.log('Passwords match! User ' + username + ':' + email + ' authenticated.');
-        } else {
+            } else {
             // Passwords don't match, authentication failed. 403 Forbidden
             res.status(403).json({ message: 'Incorrect username or password' });
-            //console.log('Passwords do not match! Authentication failed.');
-        }
-        });
+            console.log('Passwords do not match! Authentication failed.');
+            }
+
     } catch (err) {
         console.log(err);
         res.status(403).json({ message: 'Incorrect username or password / database error' });
