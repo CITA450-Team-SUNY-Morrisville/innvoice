@@ -1,37 +1,30 @@
-import { useState } from 'react';  // Import useState to manage form data
-import axios from 'axios';  // Axios is used to make API requests
+import { useState } from 'react';  // useState is used for managing form input state
+import axios from 'axios';  // Axios is used for making HTTP requests
 import Navbar from '../components/Navbar';  // Import the Navbar component
 import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
 
-// Signup component handles the signup form and its submission
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });  // Manage form data with useState
-  const [message, setMessage] = useState('');  // Manage success message
-  const [error, setError] = useState('');  // Manage error message
+// Login component handles the login form and submission
+const Login = () => {
+  const [formData, setFormData] = useState({ email: '', password: '' });  // State for form inputs
+  const [message, setMessage] = useState('');  // State for success message
+  const [error, setError] = useState('');  // State for error message
 
-  // Updates form data when user types into inputs
+  // Updates form data as the user types into inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });  // Update form data based on input changes
+    setFormData({ ...formData, [name]: value });  // Update state with the new value
   };
 
   // Handles form submission
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevents the page from reloading when the form is submitted
     try {
-      const response = await axios.post('/routes/users/signup', formData);  // Send data to backend
-      setMessage('🎉 Registration successful!');  // Display success message on successful registration
+      const response = await axios.post('/routes/users/login', formData);  // Sends form data to the server
+      setMessage('🎉 Login successful!');  // Success message on login
       setError('');  // Clear any previous error
     } catch (error) {
-      console.error('Error during sign-up:', error);  // Log error in the console
-      setError('⚠️ Registration failed. Please try again.');  // Display error message
+      console.error('Error during login:', error);  // Log error in the console
+      setError('⚠️ Login failed. Please check your credentials.');  // Display error message
       setMessage('');  // Clear success message
     }
   };
@@ -41,22 +34,8 @@ const Signup = () => {
       <Navbar />  {/* Navbar at the top of the page */}
       <BackgroundLogo>  {/* Wrap the form with the logo background */}
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full space-y-6">
-          <h1 className="text-3xl font-bold text-center text-white">Create Your Account</h1>
+          <h1 className="text-3xl font-bold text-center text-white">Log In</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username input */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-400">Username</label>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                value={formData.username}  // Sets input value to the state
-                onChange={handleChange}  // Updates state when input changes
-                className="w-full mt-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-400"
-                placeholder="Enter your username"  // Placeholder text
-                required
-              />
-            </div>
             {/* Email input */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-400">Email</label>
@@ -81,13 +60,13 @@ const Signup = () => {
                 value={formData.password}  // Sets input value to the state
                 onChange={handleChange}  // Updates state when input changes
                 className="w-full mt-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-400"
-                placeholder="Create a password"  // Placeholder text
+                placeholder="Enter your password"  // Placeholder text
                 required
               />
             </div>
             {/* Submit button */}
             <button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg">
-              Sign Up
+              Log In
             </button>
           </form>
           {/* Display success message */}
@@ -108,4 +87,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

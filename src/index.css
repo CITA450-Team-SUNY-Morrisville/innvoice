@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom dark theme and red accent */
+.bg-dark {
+  @apply bg-gray-900;
+}
+
+.text-accent {
+  @apply text-red-600;
+}
+
+.bg-accent {
+  @apply bg-red-600;
+}
+
+.bg-accent-hover:hover {
+  @apply bg-red-700;
+}
