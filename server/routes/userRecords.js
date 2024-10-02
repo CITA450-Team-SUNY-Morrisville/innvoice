@@ -68,17 +68,17 @@ router.post('/signup', async (req, res) => {
 
   // Login via checking against password returned from username or email.
   router.post('/login', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
     try {
         const query = 'SELECT password FROM signup WHERE username = ? OR email = ?'
-        const [rows] = await pool.query(query, [username, email]);
+        const [rows] = await pool.query(query, [email, email]);
 
         var passwordHash;
 
         // Check if a row was returned
         if (rows.length > 0) {
             passwordHash = rows[0].password; // Get the 'password' field from the first row
-            console.log('Password hash:', passwordHash);
+            //console.log('Password hash:', passwordHash);
 
             // Use passwordHash for further processing, such as verifying the password
         } else {
@@ -92,7 +92,7 @@ router.post('/signup', async (req, res) => {
             // Do authentication stuff here
             // Do stuff with cookies or tokens
 
-            console.log('Passwords match! User ' + username + ':' + email + ' authenticated.');
+            console.log('Passwords match! User ' + email + ' authenticated.');
             } else {
             // Passwords don't match, authentication failed. 403 Forbidden
             res.status(403).json({ message: 'Incorrect username or password' });
