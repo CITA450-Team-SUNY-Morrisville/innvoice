@@ -14,4 +14,19 @@ const pool = mysql.createPool({
     queueLimit: 0
   });
 
+// Function to check if connection is successful
+  (async function() {
+    try {
+        // Get a connection and check with a query
+        const connection = await pool.getConnection();
+        await connection.query('SELECT 1');
+        console.log('Ping successful, connection is working.');
+        
+        // Release the connection back to the pool
+        connection.release();
+    } catch (err) {
+        console.error('Error connecting to the database. Contact Jmac ASAP! Error:', err);
+    }
+})();
+
 export default pool
