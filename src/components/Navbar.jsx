@@ -39,19 +39,12 @@ const Navbar = () => {
               <Link to="/" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
                 Home  {/* Home link navigates to the homepage */}
               </Link>
-<<<<<<< Updated upstream
-=======
               {/* Dashboard Link */}
-              <Link to="/Dashboard" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
+              <Link to="/dashboard" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
                 Dashboard  {/* Dashboard link navigates to the Dashboard page */}
               </Link>
-              {/* Login Link */}
-              <Link to="/login" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
-                Login  {/* Login link navigates to the login page */}
-              </Link>
->>>>>>> Stashed changes
               {/* Sign Up Link */}
-              <Link to="/Signup" className="text-white bg-red-600 hover:bg-red-700 rounded-md px-4 py-2">
+              <Link to="/signup" className="text-white bg-red-600 hover:bg-red-700 rounded-md px-4 py-2">
                 Sign Up  {/* Sign Up link navigates to the signup page */}
               </Link>
               {/* Login Link */}
