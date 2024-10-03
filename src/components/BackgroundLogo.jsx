@@ -11,7 +11,7 @@ const BackgroundLogo = ({ children }) => {
         backgroundSize: '300px',           // Controls the size of the logo image (300px)
         backgroundPosition: 'top',         // Positions the logo at the top of the screen
         backgroundRepeat: 'no-repeat',     // Prevents the background image from repeating
-        opacity: '.75',                    // Makes the background image semi-transparent
+        //opacity: '.75',                    // Makes the background image semi-transparent
       }}
     >
       {/* Child content (e.g., forms) will be displayed here on top of the background */}

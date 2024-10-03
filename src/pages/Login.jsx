@@ -1,13 +1,18 @@
 import { useState } from 'react';  // useState is used for managing form input state
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';  // Axios is used for making HTTP requests
 import Navbar from '../components/Navbar';  // Import the Navbar component
 import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
+import { UserContext } from '../App';
 
 // Login component handles the login form and submission
 const Login = () => {
+  const [user, setUser] = useState(UserContext);
   const [formData, setFormData] = useState({ email: '', password: '' });  // State for form inputs
   const [message, setMessage] = useState('');  // State for success message
   const [error, setError] = useState('');  // State for error message
+
+  const navigate = useNavigate();
 
   // Updates form data as the user types into inputs
   const handleChange = (e) => {
@@ -19,9 +24,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevents the page from reloading when the form is submitted
     try {
-      const response = await axios.post('/routes/users/login', formData);  // Sends form data to the server
+      const response = await axios.post('/routes/users/login', formData);
       setMessage('🎉 Login successful!');  // Success message on login
       setError('');  // Clear any previous error
+      // Add the token to browser local storage
+      const token = response.data.accessToken;
+      //console.log(token);
+      // if (token) {
+         setUser ({
+           accessToken: token
+         })
+        console.log(user.accessToken);
+        navigate('/');
+      //}
+      
     } catch (error) {
       console.error('Error during login:', error);  // Log error in the console
       setError('⚠️ Login failed. Please check your credentials.');  // Display error message
