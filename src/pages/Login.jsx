@@ -35,7 +35,8 @@ const Login = () => {
            accessToken: token
          })
         console.log(user.accessToken);
-        navigate('/');
+        // navigate to routes/protected/dashboard
+        navigate('/dashboard');
       //}
       
     } catch (error) {
