@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import SignupPage from './pages/Signup';
 import LoginPage from './pages/Login';  // Import Login
+<<<<<<< Updated upstream
 import TestPage from './pages/ProtectedTest'; // Import test
 import axios from 'axios';
 
@@ -74,5 +75,26 @@ function App() {
 //const App = () => {
 //  return <RouterProvider router={router} />;
 //};
+=======
+import Dashboard from './pages/Dashboard';  // Import the Dashboard page
+
+// Create the router using `createBrowserRouter` and `createRoutesFromElements`
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<MainLayout />}>
+      <Route index element={<HomePage />} />  {/* HomePage at root URL */}
+      <Route path='/signup' element={<SignupPage />} />  {/* Signup route */}
+      <Route path='/login' element={<LoginPage />} />  {/* Login route */}
+      <Route path='/dashboard' element={<Dashboard />} />  {/* Dashboard route */}
+      <Route path='*' element={<NotFoundPage />} />  {/* Fallback for non-existent routes */}
+    </Route>
+  )
+);
+
+// Main App component
+const App = () => {
+  return <RouterProvider router={router} />;  {/* Use RouterProvider to provide the router to the app */}
+};
+>>>>>>> Stashed changes
 
 export default App;
