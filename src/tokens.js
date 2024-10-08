@@ -32,8 +32,8 @@ export const SendRefreshToken = (res, refreshToken) => {
     // Named something secret so its harder to spoof. for testing make it easilly findable.
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: 'routes/tokens/refresh_token',
-        sameSite: 'none',
+        //path: 'routes/tokens/refresh_token',
+        sameSite: 'strict',
         secure: true
     })
 };

@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Compare the passwords.
-        if (await bcrypt.compare(password, passwordHash)) {
+        if (bcrypt.compare(password, passwordHash)) {
             // Passwords match, authentication successful.
             console.log('Passwords match! User ' + email + ' authenticated.');
 
@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
             // Passwords don't match, authentication failed. 403 Forbidden
             res.status(403).json({ message: 'Incorrect username or password' });
             console.log('Passwords do not match! Authentication failed.');
-            }
+        }
 
     } catch (err) {
         console.log(err);

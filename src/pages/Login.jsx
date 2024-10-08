@@ -3,16 +3,28 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';  // Axios is used for making HTTP requests
 import Navbar from '../components/Navbar';  // Import the Navbar component
 import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
-import { UserContext } from '../App';
+// import useAuth from "../hooks/useAuth.js";
+//import jwt from 'jsonwebtoken';
 
 // Login component handles the login form and submission
 const Login = () => {
-  const [user, setUser] = useState(UserContext);
+  //const [user, setUser] = useState(UserContext);
   const [formData, setFormData] = useState({ email: '', password: '' });  // State for form inputs
   const [message, setMessage] = useState('');  // State for success message
   const [error, setError] = useState('');  // State for error message
 
   const navigate = useNavigate();
+
+  /*const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+  
+    const handleLogin = () => {
+      login().then(() => {
+        navigate("/dashboard");
+      });
+    };
+  };*/
 
   // Updates form data as the user types into inputs
   const handleChange = (e) => {
@@ -28,15 +40,12 @@ const Login = () => {
       setMessage('🎉 Login successful!');  // Success message on login
       setError('');  // Clear any previous error
       // Add the token to browser local storage
+
+      // Get the token.
       const token = response.data.accessToken;
-      //console.log(token);
-      // if (token) {
-         setUser ({
-           accessToken: token
-         })
-        console.log(user.accessToken);
-        // navigate to routes/protected/dashboard
-        navigate('/dashboard');
+      //if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)) {
+        //handleLogin();
+        navigate("/dashboard");
       //}
       
     } catch (error) {
