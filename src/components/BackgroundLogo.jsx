@@ -5,7 +5,7 @@ import logo2 from '../assets/images/logo2.png';  // Import the logo image to be 
 const BackgroundLogo = ({ children }) => {
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gray-900 relative"  // Centers the content on the screen
+      className="min-h-screen flex items-center justify-center"  // Centers the content on the screen
       style={{
         backgroundImage: `url(${logo2})`,  // Sets the logo as the background image
         backgroundSize: '300px',           // Controls the size of the logo image (300px)

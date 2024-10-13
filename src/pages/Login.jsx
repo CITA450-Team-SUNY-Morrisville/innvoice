@@ -1,107 +1,80 @@
-import { useState } from 'react';  // useState is used for managing form input state
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios';  // Axios is used for making HTTP requests
-import Navbar from '../components/Navbar';  // Import the Navbar component
-import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
-// import useAuth from "../hooks/useAuth.js";
-//import jwt from 'jsonwebtoken';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Navbar from '../components/Navbar';
+import BackgroundLogo from '../components/BackgroundLogo';
+import { ThemeContext } from '../ThemeContext'; // Import ThemeContext
 
-// Login component handles the login form and submission
 const Login = () => {
-  //const [user, setUser] = useState(UserContext);
-  const [formData, setFormData] = useState({ email: '', password: '' });  // State for form inputs
-  const [message, setMessage] = useState('');  // State for success message
-  const [error, setError] = useState('');  // State for error message
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const { theme } = useContext(ThemeContext); // Get the current theme
 
   const navigate = useNavigate();
 
-  /*const Login = () => {
-    const navigate = useNavigate();
-    const { login } = useAuth();
-  
-    const handleLogin = () => {
-      login().then(() => {
-        navigate("/dashboard");
-      });
-    };
-  };*/
-
-  // Updates form data as the user types into inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });  // Update state with the new value
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Handles form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevents the page from reloading when the form is submitted
+    e.preventDefault();
     try {
       const response = await axios.post('/routes/users/login', formData);
-      setMessage('🎉 Login successful!');  // Success message on login
-      setError('');  // Clear any previous error
-      // Add the token to browser local storage
-
-      // Get the token.
+      setMessage('🎉 Login successful!');
+      setError('');
       const token = response.data.accessToken;
-      //if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)) {
-        //handleLogin();
-        navigate("/dashboard");
-      //}
-      
+      navigate("/dashboard");
     } catch (error) {
-      console.error('Error during login:', error);  // Log error in the console
-      setError('⚠️ Login failed. Please check your credentials.');  // Display error message
-      setMessage('');  // Clear success message
+      console.error('Error during login:', error);
+      setError('⚠️ Login failed. Please check your credentials.');
+      setMessage('');
     }
   };
 
   return (
     <>
-      <Navbar />  {/* Navbar at the top of the page */}
-      <BackgroundLogo>  {/* Wrap the form with the logo background */}
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full space-y-6">
-          <h1 className="text-3xl font-bold text-center text-white">Log In</h1>
+      <Navbar />
+      <BackgroundLogo>
+        <div className={`${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} p-8 rounded-lg shadow-lg w-full space-y-6`}>
+          <h1 className="text-3xl font-bold text-center">Log In</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email input */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-400">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium">Email</label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                value={formData.email}  // Sets input value to the state
-                onChange={handleChange}  // Updates state when input changes
-                className="w-full mt-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-400"
-                placeholder="you@example.com"  // Placeholder text
+                value={formData.email}
+                onChange={handleChange}
+                className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'} w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-red-400`}
+                placeholder="you@example.com"
                 required
               />
             </div>
-            {/* Password input */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-400">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium">Password</label>
               <input
                 type="password"
                 name="password"
                 id="password"
-                value={formData.password}  // Sets input value to the state
-                onChange={handleChange}  // Updates state when input changes
-                className="w-full mt-1 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-400"
-                placeholder="Enter your password"  // Placeholder text
+                value={formData.password}
+                onChange={handleChange}
+                className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'} w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-red-400`}
+                placeholder="Enter your password"
                 required
               />
             </div>
-            {/* Submit button */}
-            <button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg">
+            <button type="submit" className={`${theme === 'dark' ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-blue-600 text-white hover:bg-blue-700'} w-full py-3 px-4 rounded-lg`}>
               Log In
             </button>
           </form>
-          {/* Display success message */}
           {message && (
             <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
               {message}
             </div>
           )}
-          {/* Display error message */}
           {error && (
             <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
               {error}

@@ -1,16 +1,18 @@
-import React from 'react';
-import Navbar from '../components/Navbar';  // Import the Navbar component
-import Hero from '../components/Hero';  // Import the Hero component
-import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
+import React, { useContext } from 'react';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import BackgroundLogo from '../components/BackgroundLogo';
+import { ThemeContext } from '../ThemeContext'; // Import ThemeContext
 
-// HomePage component that renders the full home page
 const HomePage = () => {
+  const { theme } = useContext(ThemeContext); // Get the current theme
+
   return (
-    <>
-      <Navbar />  {/* Displays the navigation bar at the top */}
-      <Hero />     {/* Displays the Hero component with welcome text */}
-      <BackgroundLogo/>  {/* Adds the logo as a background for the page */}
-    </>
+    <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+      <Navbar />
+      <Hero />
+      <BackgroundLogo />
+    </div>
   );
 }
 
