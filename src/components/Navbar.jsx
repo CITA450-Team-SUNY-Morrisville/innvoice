@@ -1,62 +1,69 @@
+
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';  // Allows us to create navigation links
-import logo from '../assets/images/logo.png';  // Import the logo image
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/images/logo.png';
 import { UserContext } from '../App';
+import { ThemeContext } from '../ThemeContext';
 
-// Navbar component that appears at the top of all pages for navigation
 const Navbar = () => {
-
   const [user, setUser] = React.useContext(UserContext);
+  const { theme, toggleTheme } = React.useContext(ThemeContext);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const navigate = useNavigate();
 
   const logOutCallback = async () => {
     await fetch('/routes/users/logout', {
       method: 'POST',
-      credentials: 'include', // Needed to include the cookie
+      credentials: 'include',
     });
-    // Clear user from context
     setUser({});
-    console.log("logout successful");
-    // Navigate back to startpage
     navigate('/');
-  }
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-800">  {/* Dark background with a border at the bottom */}
-      <div className="mx-auto max-w-auto px-2 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-            {/* Logo and link to homepage */}
-            <Link className="flex flex-shrink-0 items-center mr-4" to="/">
-              <img className="h-10 w-12" src={logo} alt="InnVoice"/>  {/* Logo image */}
-              <span className="hidden md:block text-white text-3xl font-bold ml-2">
-                InnVoice  {/* Displayed logo text next to the image */}
+    <nav className={`${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} border-b ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} relative z-50`}>
+      <div className="mx-auto max-w-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link className="flex items-center mr-4" to="/">
+              <img className="h-10 w-12" src={logo} alt="InnVoice" />
+              <span className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-2xl font-bold ml-2`}>
+                InnVoice
               </span>
             </Link>
-            <div className="md:ml-auto flex space-x-2">
-              {/* Home Link */}
-              <Link to="/" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
-                Home  {/* Home link navigates to the homepage */}
-              </Link>
-              {/* Dashboard Link */}
-              <Link to="/dashboard" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
-                Dashboard  {/* Dashboard link navigates to the Dashboard page */}
-              </Link>
-              {/* Sign Up Link */}
-              <Link to="/signup" className="text-white bg-red-600 hover:bg-red-700 rounded-md px-4 py-2">
-                Sign Up  {/* Sign Up link navigates to the signup page */}
-              </Link>
-              {/* Login Link */}
-              <Link to="/login" className="text-white bg-gray-700 hover:bg-gray-800 rounded-md px-4 py-2">
-                Login  {/* Login link navigates to the login page */}
-              </Link>
-              {/* Logout Link */}
-              <button onClick={logOutCallback} className="text-white bg-red-600 hover:bg-gray-800 rounded-md px-4 py-2">
-                Log Out  {/* Login link navigates to the login page */}
-              </button>
-            </div>
           </div>
+          <button onClick={toggleMenu} className="text-3xl focus:outline-none ml-auto md:ml-0">
+            <span className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>&#9776;</span> {/* Hamburger icon for dropdown menu */}
+          </button>
+        </div>
+        <div className={`absolute top-16 left-0 w-full ${isOpen ? 'block' : 'hidden'} z-50`}>
+          <ul className={`flex flex-col p-4 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} text-center`}>
+            <li className="my-2">
+              <Link to="/" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Home</Link>
+            </li>
+            <li className="my-2">
+              <Link to="/dashboard" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Dashboard</Link>
+            </li>
+            <li className="my-2">
+              <Link to="/signup" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Signup</Link>
+            </li>
+            <li className="my-2">
+              <Link to="/login" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Login</Link>
+            </li>
+            <li className="my-2">
+              <button onClick={logOutCallback} className={`block w-full py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Log Out</button>
+            </li>
+            <li className="my-2">
+              <button onClick={toggleTheme} className={`block w-full py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>

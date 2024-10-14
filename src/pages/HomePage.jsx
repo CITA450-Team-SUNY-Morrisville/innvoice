@@ -1,16 +1,25 @@
-import React from 'react';
-import Navbar from '../components/Navbar';  // Import the Navbar component
-import Hero from '../components/Hero';  // Import the Hero component
-import BackgroundLogo from '../components/BackgroundLogo';  // Import the BackgroundLogo component
 
-// HomePage component that renders the full home page
+import React, { useContext } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';  // Import Footer component
+import Hero from '../components/Hero';  // Import Hero component for main banner
+import BackgroundLogo from '../components/BackgroundLogo';  // Import BackgroundLogo for visual effect
+import { ThemeContext } from '../ThemeContext'; // Import ThemeContext
+
 const HomePage = () => {
+  const { theme } = useContext(ThemeContext); // Get the current theme
+
   return (
-    <>
-      <Navbar />  {/* Displays the navigation bar at the top */}
-      <Hero />     {/* Displays the Hero component with welcome text */}
-      <BackgroundLogo/>  {/* Adds the logo as a background for the page */}
-    </>
+    <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} min-h-screen flex flex-col`}>
+      {/* Navbar at the top of the page */}
+      <Navbar />
+      {/* Main Hero section */}
+      <Hero />
+      {/* Background logo */}
+      <BackgroundLogo />
+      {/* Footer at the bottom of the page */}
+      <Footer />
+    </div>
   );
 }
 

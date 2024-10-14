@@ -1,10 +1,15 @@
+/* index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom dark theme and red accent */
+/* Custom dark and light themes */
 .bg-dark {
-  @apply bg-gray-900;
+  @apply bg-gray-900 text-white;
+}
+
+.bg-light {
+  @apply bg-white text-black;
 }
 
 .text-accent {
