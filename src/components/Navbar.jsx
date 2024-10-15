@@ -37,29 +37,31 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-          <button onClick={toggleMenu} className="text-3xl focus:outline-none ml-auto md:ml-0">
-            <span className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>&#9776;</span> {/* Hamburger icon for dropdown menu */}
-          </button>
+          <div className="relative">
+            <button onClick={toggleMenu} className="text-3xl focus:outline-none ml-auto md:ml-0 relative">
+              <span className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>&#9776;</span> {/* Hamburger icon for dropdown menu */}
+            </button>
+          </div>
         </div>
-        <div className={`absolute top-16 left-0 w-full ${isOpen ? 'block' : 'hidden'} z-50`}>
-          <ul className={`flex flex-col p-4 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} text-center`}>
+        <div className={`absolute top-full right-0 w-48 ${isOpen ? 'block' : 'hidden'} z-50 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} shadow-lg rounded-lg transition-opacity duration-300 ease-in-out opacity-0 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+          <ul className="flex flex-col p-4 text-center">
             <li className="my-2">
-              <Link to="/" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Home</Link>
+              <Link to="/" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Home</Link>
             </li>
             <li className="my-2">
-              <Link to="/dashboard" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Dashboard</Link>
+              <Link to="/dashboard" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</Link>
             </li>
             <li className="my-2">
-              <Link to="/signup" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Signup</Link>
+              <Link to="/signup" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Signup</Link>
             </li>
             <li className="my-2">
-              <Link to="/login" className={`block py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Login</Link>
+              <Link to="/login" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Login</Link>
             </li>
             <li className="my-2">
-              <button onClick={logOutCallback} className={`block w-full py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>Log Out</button>
+              <button onClick={logOutCallback} className="block w-full py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Log Out</button>
             </li>
             <li className="my-2">
-              <button onClick={toggleTheme} className={`block w-full py-2 px-4 hover:${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
+              <button onClick={toggleTheme} className="block w-full py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">
                 Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
               </button>
             </li>
