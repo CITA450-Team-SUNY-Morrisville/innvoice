@@ -21,15 +21,26 @@ export const CreateRefreshToken = userID => {
     return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'});
 };
 
-export const SendAccessToken = (req, res, accessToken) => {
-    res.send({
+export const SendAccessToken = (res, accessToken) => {
+    /*res.send({
         accessToken: accessToken//,
         //email: req.body.email
+    })*/
+    //res.clearCookie('accessToken');
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        //path: 'routes/tokens/refresh_token',
+        sameSite: 'strict',
+        secure: true
     })
 };
 
 export const SendRefreshToken = (res, refreshToken) => {
     // Named something secret so its harder to spoof. for testing make it easilly findable.
+    // Revoke cookie then give again.
+    //if (req.cookies.refreshToken) {
+    //    res.clearCookie('refreshToken');
+    //}
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         //path: 'routes/tokens/refresh_token',

@@ -1,7 +1,13 @@
 import express from "express";
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
+// This will help us connect to the database
+import pool from "../db/connection.js";
 import cookies from "cookie-parser";
+
+
+dotenv.config();
 
 // Authentication with tokens
 import { CreateAccessToken, CreateRefreshToken, SendAccessToken, SendRefreshToken } from '../../src/tokens.js';
@@ -17,35 +23,52 @@ const router = express.Router();
 //var token = localStorage.getItem('token');
 router.use(cookies());
 // 5. Get a new access token with a refresh token
-router.post('/refresh_token', (req, res) => {
+router.post('/refresh_token', async (req, res) => {
     try {
     const token = req.cookies.refreshToken;
+    // Debug console log, comment out when doen.
     console.log(`cookies: ${req.cookies.refreshToken}`);
     // If we don't have a token in our request
     if (!token) return res.send({ accessToken: '' });
     // We have a token, let's verify it!
     let payload = null;
-    try {``
-      payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
+    try {
+      payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
+      console.log('fail verify')
       return res.send({ accessToken: '' });
     }
     // token is valid, check if user exist
-    // const user = fakeDB.find(user => user.id === payload.userID);
-    //if (!user) return res.send({ accessToken: '' });
+    // get userid where refreshtoken exists
+
+    const query = 'SELECT id, refreshToken FROM signup WHERE refreshToken = ?'
+    const [rows, fields] = await pool.query(query, [token]);
+    // if user doesnt exist.
+    if (!rows) return res.send({ accessToken: '' });
     // user exist, check if refreshtoken exist on user
-    //if (user.refreshtoken !== token)
-    //  return res.send({ accessToken: '' });
+    console.log(rows[0]);
+    //console.log(rows[0].refreshToken);
+    console.log(token);
+    if (rows[0].refreshToken !== token) return res.send({ accessToken: '' });
     // token exist, create new Refresh- and accesstoken
-    const accessToken = createAccessToken(user.id);
-    const refreshToken = createRefreshToken(user.id);
+    const accessToken = CreateAccessToken(rows[0].id);
+    const newRefreshToken = CreateRefreshToken(rows[0].id);
+    console.log(newRefreshToken);
     // update refreshtoken on user in db
-    // Could have different versions instead!
-    //user.refreshToken = refreshToken;
+    try {
+      const refreshTokenQuery = 'UPDATE signup SET refreshToken = ? WHERE id = ?';
+      await pool.query(refreshTokenQuery, [newRefreshToken, rows[0].id])
+      console.log('seuccessfully inserted refresh token');
+    } catch(err) {
+      console.log('error inserting refresh token: ' + err);
+      // Server error but idk what to return just hope it works
+      return res.send({ accessToken: '' });
+    }
+
     // All good to go, send new refreshtoken and accesstoken
-    sendRefreshToken(res, refreshToken);
-    //console.log('all good');
-    return res.send({ accessToken });
+    console.log('all good');
+    SendRefreshToken(res, newRefreshToken);
+    SendAccessToken(res, accessToken);
 } catch (err) {
     console.log(err);
     return res.send({ accessToken: '' });

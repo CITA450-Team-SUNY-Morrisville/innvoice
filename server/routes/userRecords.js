@@ -54,19 +54,16 @@ router.get('/records', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const query = 'SELECT * FROM signup WHERE username = ? OR email = ?'
-        const [user] = await pool.query(query, [email, email]);
+        const query = 'SELECT * FROM signup WHERE email = ?'
+        const [user] = await pool.query(query, [email]);
 
         var passwordHash;
 
         // Check if a row was returned
         if (user.length > 0) {
             passwordHash = user[0].password; // Get the 'password' field from the first row
-            //console.log('Password hash:', passwordHash);
-        } else {
-            console.log('No user found with the provided username or email');
-        }
-
+            console.log('Password hash:', passwordHash);
+            
         // Compare the passwords.
         if (bcrypt.compare(password, passwordHash)) {
             // Passwords match, authentication successful.
@@ -74,39 +71,60 @@ router.post('/login', async (req, res) => {
 
             // Do authentication stuff here.
             try {
-            const accessToken = CreateAccessToken(user.ID);
-            const refreshToken = CreateRefreshToken(user.ID);
+                const accessToken = CreateAccessToken(user.ID);
+                const refreshToken = CreateRefreshToken(user.ID);
 
-            console.log('Access token: ' + accessToken);
-            console.log('Refresh token: ' + refreshToken);
+                console.log('Access token: ' + accessToken);
+                console.log('Refresh token: ' + refreshToken);
 
-            // Add refresh token to database.
-            //user.refreshToken = refreshToken;
+                // Add refresh token to database.
+                try {
+                    const refreshTokenQuery = 'UPDATE signup SET refreshToken = ? WHERE email = ?';
+                    await pool.query(refreshTokenQuery, [refreshToken, email])
+                    console.log('seuccessfully inserted refresh token');
+                } catch(err) {
+                    console.log('error inserting refresh token: ' + err);
+                    // 500: Internal Server Error
+                    res.status(500).json({ message: 'Database error' });
+                }
 
-            // Send token.
-            // Refresh token as a cookie.
-            // Access token as a response.
-            SendRefreshToken(res, refreshToken);
-            SendAccessToken(req, res, accessToken);
-
+                // Send token.
+                // Refresh token as a cookie. 
+                // Access token as a response.
+                SendRefreshToken(res, refreshToken);
+                SendAccessToken(res, accessToken);
             } catch (err) {
-                res.status(500).json({ message: 'Failed to generate authentication token. Contact Alex ASAP! Error: ' + err });
                 console.log('Failed to generate authentication token. Contact Alex ASAP! Error: ' + err);
+                // 500: Internal Server Error
+                res.status(500).json({ message: 'Failed to generate authentication token. Contact Alex ASAP! Error: ' + err });
             }
-            } else {
+
+            // 200: OK
+            res.status(200).json({ message: 'User authenticated.' });
+
+        } else {
             // Passwords don't match, authentication failed. 403 Forbidden
-            res.status(403).json({ message: 'Incorrect username or password' });
             console.log('Passwords do not match! Authentication failed.');
+            // 401: Forbidden
+            res.status(401).json({ message: 'Incorrect username or password' });
+        }
+        // No password from provided email.
+        } else {
+            console.log('No user found with the provided username or email');
+            // 401: Forbidden
+            res.status(401).json({ message: 'Incorrect username or password' });
         }
 
     } catch (err) {
         console.log(err);
-        res.status(403).json({ message: 'Incorrect username or password / database error' });
+        // 500: Internal Server Error
+        res.status(500).json({ message: 'Database error' });
     }
 });
 
 router.post('/logout', (req, res) => {
     res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
     return res.status(200).json({
         message: 'Logged out'
     })
