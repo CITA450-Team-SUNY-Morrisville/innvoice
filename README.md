@@ -1,8 +1,12 @@
-# React + Vite
+Class: CITA450-01 APPLIED DATABASE MANAGER 24FA 13482, 2024FA-MOR-CITA450-13482, MOR - 24FA - Fall 2024
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Instructor: Professor Elfituri**
 
-Currently, two official plugins are available:
+Team Members:
+- Caleb Bender
+- Chris Bonsante
+- Jacob Mckenzie
+- Keeley Riley
+- Alexander Woods
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
