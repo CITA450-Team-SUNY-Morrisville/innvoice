@@ -1,17 +1,20 @@
+
 /* index.css */
+/* Import Tailwind's base styles, component styles, and utility classes */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom dark and light themes */
+/* Custom dark and light themes defined using Tailwind's @apply directive */
 .bg-dark {
-  @apply bg-gray-900 text-white;
+  @apply bg-gray-900 text-white; /* Applies a dark background with white text */
 }
 
 .bg-light {
-  @apply bg-white text-black;
+  @apply bg-white text-black; /* Applies a light background with black text */
 }
 
+/* Accent colors used for highlighting important text or buttons */
 .text-accent {
   @apply text-red-600;
 }
@@ -21,5 +24,5 @@
 }
 
 .bg-accent-hover:hover {
-  @apply bg-red-700;
+  @apply bg-red-700; /* Changes background color on hover */
 }
