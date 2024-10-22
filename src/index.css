@@ -26,3 +26,13 @@
 .bg-accent-hover:hover {
   @apply bg-red-700; /* Changes background color on hover */
 }
+
+/* Custom Select Dropdown Styling */
+select {
+  @apply bg-white text-black border-black; /* Default Light Mode Styles */
+}
+
+/* Dark Mode Styling for Select */
+.dark select {
+  @apply bg-gray-800 text-white border-white; /* Dark Mode Styles */
+}
