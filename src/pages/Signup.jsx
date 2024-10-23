@@ -1,12 +1,11 @@
-
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';  // Import Footer component
 import BackgroundLogo from '../components/BackgroundLogo';
 import { ThemeContext } from '../ThemeContext'; // Import ThemeContext
 
-// Signup component handles the signup form and its submission
 const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -16,6 +15,7 @@ const Signup = () => {
   const [message, setMessage] = useState('');  // Manage success message
   const [error, setError] = useState('');  // Manage error message
   const { theme } = useContext(ThemeContext); // Get the current theme
+  const navigate = useNavigate();  // Hook to navigate between routes
 
   // Updates form data when user types into inputs
   const handleChange = (e) => {
@@ -33,6 +33,8 @@ const Signup = () => {
       const response = await axios.post('/routes/users/signup', formData);  // Send data to backend
       setMessage('🎉 Registration successful!');  // Display success message on successful registration
       setError('');  // Clear any previous error
+      // Redirect to login page after successful signup
+      navigate('/login');
     } catch (error) {
       console.error('Error during sign-up:', error);  // Log error in the console
       setError('⚠️ Registration failed. Please try again.');  // Display error message
@@ -61,7 +63,7 @@ const Signup = () => {
                   value={formData.username}  // Sets input value to the state
                   onChange={handleChange}  // Updates state when input changes
                   className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'} w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-red-400`}
-                  placeholder="Enter your username"  // Placeholder text
+                  placeholder="Enter your username"
                   required
                 />
               </div>
@@ -73,9 +75,9 @@ const Signup = () => {
                   name="email"
                   id="email"
                   value={formData.email}  // Sets input value to the state
-                  onChange={handleChange}  // Updates state when input changes
+                  onChange={handleChange}
                   className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'} w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-red-400`}
-                  placeholder="you@example.com"  // Placeholder text
+                  placeholder="you@example.com"
                   required
                 />
               </div>
@@ -87,9 +89,9 @@ const Signup = () => {
                   name="password"
                   id="password"
                   value={formData.password}  // Sets input value to the state
-                  onChange={handleChange}  // Updates state when input changes
+                  onChange={handleChange}
                   className={`${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'} w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-red-400`}
-                  placeholder="Create a password"  // Placeholder text
+                  placeholder="Create a password"
                   required
                 />
               </div>

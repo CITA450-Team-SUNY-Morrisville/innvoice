@@ -28,7 +28,7 @@ const Login = () => {
       const response = await axios.post('/routes/users/login', formData);  // Send login request to server
       setMessage('🎉 Login successful!');  // Set success message
       setError('');  // Clear any existing errors
-      navigate("/dashboard");  // Navigate to dashboard on success
+      navigate("/home");  // Navigate to dashboard on success
     } catch (error) {
       console.error('Error during login:', error);  // Log error in the console
       setError('⚠️ Login failed. Please check your credentials.');  // Set error message
@@ -92,6 +92,10 @@ const Login = () => {
                 {error}
               </div>
             )}
+            {/* Sign-up link */}
+            <div className="text-center mt-4">
+              <p>Don't have an account? <a href="/signup" className="text-blue-600 hover:underline">Sign up</a></p>
+            </div>
           </div>
         </BackgroundLogo>
       </div>
