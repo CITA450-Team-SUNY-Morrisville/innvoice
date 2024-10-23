@@ -8,7 +8,7 @@ import IsAuth from '../../src/isAuth.js';
 const saltRounds = 10;
 dotenv.config();
 
-// This will help us connect to the database
+// This will connect to the database (REQUIRED!!!!!)
 import pool from "../db/connection.js";
 
 // router is an instance of the express router.
@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
     const hash = await bcrypt.hash(password, salt);
 
     try {
-        const query = 'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)';
+        const query = 'INSERT INTO User (username, email, password) VALUES (?, ?, ?)';
         // use hash instead of password
         const [results] = await pool.query(query, [username, email, hash]);
         res.status(201).json({ message: 'User signed up successfully', userId: results.insertId });
@@ -42,7 +42,7 @@ router.post('/signup', async (req, res) => {
   // GET /signup route - to fetch all users
 router.get('/records', async (req, res) => {
     try {
-        const [results] = await pool.query('SELECT * FROM signup');
+        const [results] = await pool.query('SELECT * FROM User');
         res.status(200).json(results); // Return all users as JSON
     } catch (err) {
         console.error('Error fetching data from signup table:', err);
@@ -54,7 +54,7 @@ router.get('/records', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const query = 'SELECT * FROM signup WHERE email = ?'
+        const query = 'SELECT * FROM User WHERE email = ?'
         const [user] = await pool.query(query, [email]);
 
         var passwordHash;
@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
 
                 // Add refresh token to database.
                 try {
-                    const refreshTokenQuery = 'UPDATE signup SET refreshToken = ? WHERE email = ?';
+                    const refreshTokenQuery = 'UPDATE User SET refreshToken = ? WHERE email = ?';
                     await pool.query(refreshTokenQuery, [refreshToken, email])
                     console.log('seuccessfully inserted refresh token');
                 } catch(err) {

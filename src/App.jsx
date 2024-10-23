@@ -16,30 +16,30 @@ export const UserContext = React.createContext([]);
 
 function App() {
   // State to manage user information and loading status
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
+const [user, setUser] = useState({});
+//const [loading, setLoading] = useState(true);
 
-  // useEffect to check for a valid refresh token upon loading the app
-  useEffect(() => {
-    async function checkRefreshToken() {
-      const result = await axios.post('/routes/tokens/refresh_token', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+  // // useEffect to check for a valid refresh token upon loading the app
+  // useEffect(() => {
+  //   async function checkRefreshToken() {
+  //     const result = await axios.post('/routes/tokens/refresh_token', {
+  //       credentials: 'include',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
 
-      // Set the user state with the received access token and stop loading
-      setUser({
-        accessToken: result.accessToken,
-      });
-      setLoading(false);
-    }
-    checkRefreshToken(); // Call the function when the component mounts
-  }, []); // Empty dependency array to run only once when the component mounts
+  //     // Set the user state with the received access token and stop loading
+  //     setUser({
+  //       accessToken: result.accessToken,
+  //     });
+  //     setLoading(false);
+  //   }
+  //   checkRefreshToken(); // Call the function when the component mounts
+  // }, []); // Empty dependency array to run only once when the component mounts
 
-  // Display a loading message while waiting for user data
-  if (loading) return <div>Loading ...</div>;
+  // // Display a loading message while waiting for user data
+  // if (loading) return <div>Loading ...</div>;
 
   // Define the routes for the application using React Router
   const router = createBrowserRouter(
@@ -48,7 +48,6 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/test' element={<TestPage />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='*' element={<NotFoundPage />} /> {/* Catch-all for undefined routes */}
       </Route>
