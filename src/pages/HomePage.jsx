@@ -15,6 +15,12 @@ const HomePage = () => {
       <Navbar />
       {/* Main Hero section */}
       <Hero />
+      {/* Buttons added to the homepage */}
+      <div className="flex justify-center mt-10 space-x-4">
+        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Manage Guests</button>
+        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Manage Rooms</button>
+        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Manage Reservations</button>
+      </div>
       {/* Background logo */}
       <BackgroundLogo />
       {/* Footer at the bottom of the page */}
