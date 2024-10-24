@@ -1,9 +1,10 @@
+
 import express from "express";
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 // Authentication with tokens
 import { CreateAccessToken, CreateRefreshToken, SendAccessToken, SendRefreshToken } from '../../src/tokens.js';
-import IsAuth from '../../src/isAuth.js';
+import IsAuth from '../../src/isAuth.js';  // Middleware for checking token validity
 
 const saltRounds = 10;
 dotenv.config();
@@ -24,11 +25,17 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Salt and hash password.
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(password, salt);
-
     try {
+        // Check if a user with the same email or username already exists
+        const [existingUser] = await pool.query('SELECT * FROM User WHERE email = ? OR username = ?', [email, username]);
+        if (existingUser.length > 0) {
+            return res.status(400).json({ message: 'User with this email or username already exists' });
+        }
+
+        // Salt and hash password.
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hash = await bcrypt.hash(password, salt);
+
         const query = 'INSERT INTO User (username, email, password) VALUES (?, ?, ?)';
         // use hash instead of password
         const [results] = await pool.query(query, [username, email, hash]);
@@ -39,18 +46,7 @@ router.post('/signup', async (req, res) => {
     }
 });
   
-  // GET /signup route - to fetch all users
-router.get('/records', async (req, res) => {
-    try {
-        const [results] = await pool.query('SELECT * FROM User');
-        res.status(200).json(results); // Return all users as JSON
-    } catch (err) {
-        console.error('Error fetching data from signup table:', err);
-        res.status(500).json({ message: 'Database error' });
-    }
- });
-
-  // Login via checking against password returned from username or email.
+// POST /login route - to authenticate user and generate tokens
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -62,72 +58,70 @@ router.post('/login', async (req, res) => {
         // Check if a row was returned
         if (user.length > 0) {
             passwordHash = user[0].password; // Get the 'password' field from the first row
-            console.log('Password hash:', passwordHash);
             
         // Compare the passwords.
-        if (bcrypt.compare(password, passwordHash)) {
+        if (await bcrypt.compare(password, passwordHash)) {
             // Passwords match, authentication successful.
-            console.log('Passwords match! User ' + email + ' authenticated.');
 
-            // Do authentication stuff here.
-            try {
-                const accessToken = CreateAccessToken(user.ID);
-                const refreshToken = CreateRefreshToken(user.ID);
+            // Create access and refresh tokens for the authenticated user
+            const accessToken = CreateAccessToken(user[0].id);
+            const refreshToken = CreateRefreshToken(user[0].id);
 
-                console.log('Access token: ' + accessToken);
-                console.log('Refresh token: ' + refreshToken);
+            // Store refresh token in the database
+            const refreshTokenQuery = 'UPDATE User SET refreshToken = ? WHERE email = ?';
+            await pool.query(refreshTokenQuery, [refreshToken, email]);
 
-                // Add refresh token to database.
-                try {
-                    const refreshTokenQuery = 'UPDATE User SET refreshToken = ? WHERE email = ?';
-                    await pool.query(refreshTokenQuery, [refreshToken, email])
-                    console.log('seuccessfully inserted refresh token');
-                } catch(err) {
-                    console.log('error inserting refresh token: ' + err);
-                    // 500: Internal Server Error
-                    res.status(500).json({ message: 'Database error' });
-                }
+            // Send the tokens to the user
+            SendRefreshToken(res, refreshToken);  // Set refresh token as cookie
+            SendAccessToken(res, accessToken);    // Send access token in the response
 
-                // Send token.
-                // Refresh token as a cookie. 
-                // Access token as a response.
-                SendRefreshToken(res, refreshToken);
-                SendAccessToken(res, accessToken);
-            } catch (err) {
-                console.log('Failed to generate authentication token. Contact Alex ASAP! Error: ' + err);
-                // 500: Internal Server Error
-                res.status(500).json({ message: 'Failed to generate authentication token. Contact Alex ASAP! Error: ' + err });
-            }
-
-            // 200: OK
-            res.status(200).json({ message: 'User authenticated.' });
+            // Respond with success message
+            return res.status(200).json({ message: 'User authenticated.', accessToken });
 
         } else {
-            // Passwords don't match, authentication failed. 403 Forbidden
-            console.log('Passwords do not match! Authentication failed.');
-            // 401: Forbidden
-            res.status(401).json({ message: 'Incorrect username or password' });
+            // Passwords don't match, authentication failed.
+            return res.status(401).json({ message: 'Incorrect username or password' });
         }
-        // No password from provided email.
         } else {
-            console.log('No user found with the provided username or email');
-            // 401: Forbidden
-            res.status(401).json({ message: 'Incorrect username or password' });
+            // No user found with the provided email
+            return res.status(401).json({ message: 'Incorrect username or password' });
         }
 
     } catch (err) {
-        console.log(err);
-        // 500: Internal Server Error
-        res.status(500).json({ message: 'Database error' });
+        console.log('Login error:', err);
+        return res.status(500).json({ message: 'Database error' });
     }
 });
 
+// POST /logout route - clear tokens and log out user
 router.post('/logout', (req, res) => {
     res.clearCookie('refreshToken');
     res.clearCookie('accessToken');
     return res.status(200).json({
         message: 'Logged out'
     })
+});
+
+// GET /records - fetch all users (existing route)
+router.get('/records', async (req, res) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM User');
+        res.status(200).json(results); // Return all users as JSON
+    } catch (err) {
+        console.error('Error fetching data from signup table:', err);
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+// Example protected route: Only accessible if the user is authenticated
+// Added IsAuth middleware to protect this route
+router.get('/protected', IsAuth, async (req, res) => {
+    try {
+        res.status(200).json({ message: 'Access granted to protected resource.' });
+    } catch (err) {
+        console.error('Error accessing protected route:', err);
+        res.status(500).json({ message: 'Error accessing protected resource.' });
+    }
 });
 
 export default router;
