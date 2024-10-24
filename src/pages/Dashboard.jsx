@@ -45,7 +45,7 @@ const Dashboard = () => {
           </button>
 
           {/* Reservation page redirect */}
-          <button className="p-4 rounded-lg shadow-lg bg-yellow-600 text-white hover:bg-purple-700 transition-all" onClick={() => navigate("/reservations")}>
+          <button className="p-4 rounded-lg shadow-lg bg-yellow-600 text-white hover:bg-purple-700 transition-all" onClick={() => navigate("/rooms")}>
             Reservations
           </button>
         </div>

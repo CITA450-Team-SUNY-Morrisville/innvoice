@@ -27,7 +27,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/home' element={<HomePage />} />  {/* Ensure this is correct */}
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/reservations' element={<RoomsPage />} />
+        <Route path='/rooms' element={<RoomsPage />} />
         <Route path='*' element={<NotFoundPage />} /> {/* Catch-all for undefined routes */}
       </Route>
     )
