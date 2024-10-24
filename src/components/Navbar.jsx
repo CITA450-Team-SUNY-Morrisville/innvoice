@@ -33,7 +33,7 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             {/* Logo linking to the home page */}
-            <Link className="flex items-center mr-4" to="/">
+            <Link className="flex items-center mr-4" to="/home">
               <img className="h-10 w-12" src={logo} alt="InnVoice" />
               <span className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-2xl font-bold ml-2`}>
                 InnVoice
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className={`absolute top-full right-0 w-48 ${isOpen ? 'block' : 'hidden'} z-50 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} shadow-lg rounded-lg transition-opacity duration-300 ease-in-out opacity-0 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <ul className="flex flex-col p-4 text-center">
             <li className="my-2">
-              <Link to="/" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Home</Link>
+              <Link to="/home" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Home</Link>
             </li>
             <li className="my-2">
               <Link to="/dashboard" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</Link>

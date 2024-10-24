@@ -1,3 +1,4 @@
+
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -27,6 +28,8 @@ const Signup = () => {
   };
 
   // Handles form submission
+  // Notation: This now checks for specific errors from the backend, such as when a duplicate user exists,
+  // and displays a relevant error message to the user.
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevents the page from reloading when the form is submitted
     try {
@@ -37,7 +40,11 @@ const Signup = () => {
       navigate('/login');
     } catch (error) {
       console.error('Error during sign-up:', error);  // Log error in the console
-      setError('⚠️ Registration failed. Please try again.');  // Display error message
+      if (error.response && error.response.status === 400) {
+        setError('⚠️ User with this email or username already exists.');  // Display specific error message
+      } else {
+        setError('⚠️ Registration failed. Please try again.');  // Display general error message
+      }
       setMessage('');  // Clear success message
     }
   };
