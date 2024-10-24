@@ -10,7 +10,8 @@ import pool from "../db/connection.js";
 // Example route: Get list of rooms
 router.get('/', async (req, res) => {
   try {
-    const [results] = await pool.query('SELECT * FROM Room');
+    const query = 'SELECT * FROM Room'
+    const [results] = await pool.query(query);
     res.status(200).json(results); // Return all users as JSON
   } catch (err) {
     console.error('Error fetching data from room table:', err);
@@ -18,7 +19,6 @@ router.get('/', async (req, res) => {
 }
   //res.send('List of rooms');
 });
-
 // Example route: Add a room
 router.post('/', async (req, res) => {
   const newRoom = req.body; // Assuming new room info is sent in the request body
