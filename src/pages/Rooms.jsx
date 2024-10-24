@@ -106,9 +106,8 @@ const Rooms = () => {
                 <div className="flex-grow">
                   <p className="text-xl font-bold">Room: {room.roomNumber}</p>
                   <p>Status: {room.status.charAt(0).toUpperCase() + room.status.slice(1)}</p>
-                  <p>
-                    Available: {room.status === 'available' ? <span className="text-green-600">(Green Light)</span> : <span className="text-red-600">(Unavailable)</span>}
-                  </p>
+                  <p>Type: {['R100', 'R150', 'R200'].includes(room.roomTypeCode) ? "Normal" : "Suite"}</p>
+                  <p>Available: {room.status === 'available' ? <span className="text-green-600">(Green Light)</span> : <span className="text-red-600">(Unavailable)</span>}</p>
                 </div>
               </div>
             ))
