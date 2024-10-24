@@ -24,8 +24,12 @@ const Dashboard = () => {
               try {
               const response = await axios.get('/routes/rooms');
 
-              for (var i in response.data) {
-                console.log(response.data[i])
+              if (response.data) {
+                console.log("All Rooms:")
+
+                for (var i in response.data) {
+                  console.log(response.data[i])
+                }
               }
 
             } catch (err) {
@@ -41,12 +45,15 @@ const Dashboard = () => {
               try {
               const response = await axios.get('/routes/rooms');
 
-              for (var i in response.data) {
-                if (response.data[i].status == 'available') {
-                  console.log(response.data[i])
+              if (response.data) {
+                console.log("Rooms available reservation:")
+
+                for (var i in response.data) {
+                  if (response.data[i].status == 'available') {
+                    console.log(response.data[i])
+                  }
                 }
               }
-
             } catch (err) {
               console.log("Error getting room data: ", err)
             }
@@ -60,12 +67,15 @@ const Dashboard = () => {
               try {
               const response = await axios.get('/routes/rooms');
 
-              for (var i in response.data) {
-                if (response.data[i].status == 'occupied') {
-                  console.log(response.data[i])
+              if (response.data) {
+                console.log("Reserved rooms:")
+
+                for (var i in response.data) {
+                  if (response.data[i].status == 'occupied') {
+                    console.log(response.data[i])
+                  }
                 }
               }
-
             } catch (err) {
               console.log("Error getting room data: ", err)
             }
@@ -78,13 +88,16 @@ const Dashboard = () => {
             async (e) => {
               try {
               const response = await axios.get('/routes/rooms');
+              
+              if (response.data) {
+                console.log("Rooms unavailable due to maintenence or reservation:")
 
-              for (var i in response.data) {
-                if (response.data[i].status == 'occupied' || response.data[i].status == 'maintenance') {
-                  console.log(response.data[i])
+                for (var i in response.data) {
+                  if (response.data[i].status == 'occupied' || response.data[i].status == 'maintenance') {
+                    console.log(response.data[i])
+                  }
                 }
               }
-
             } catch (err) {
               console.log("Error getting room data: ", err)
             }
