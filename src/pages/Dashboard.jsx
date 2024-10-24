@@ -1,4 +1,4 @@
-
+import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
 import Navbar from '../components/Navbar';  
 import Footer from '../components/Footer';  
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [isRoomMgmtFormOpen, setRoomMgmtFormOpen] = useState(false); // Room management form state
   const [isGuestMgmtFormOpen, setGuestMgmtFormOpen] = useState(false); // Guest management form state
   const [isEmployeeMgmtFormOpen, setEmployeeMgmtFormOpen] = useState(false); // Employee management form state
+  const navigate = useNavigate();  // Hook to navigate between routes
 
   return (
     <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} min-h-screen flex flex-col`}>
@@ -41,6 +42,11 @@ const Dashboard = () => {
           {/* Inn Management Button */}
           <button className="p-4 rounded-lg shadow-lg bg-yellow-600 text-white hover:bg-yellow-700 transition-all" onClick={() => setInnMgmtOpen(true)}>
             Inn Management
+          </button>
+
+          {/* Reservation page redirect */}
+          <button className="p-4 rounded-lg shadow-lg bg-yellow-600 text-white hover:bg-purple-700 transition-all" onClick={() => navigate("/reservations")}>
+            Reservations
           </button>
         </div>
       </div>
