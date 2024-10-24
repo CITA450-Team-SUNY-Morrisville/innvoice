@@ -15,7 +15,7 @@ const Dashboard = () => {
       <Navbar />
 
       <div className="container mx-auto p-6 flex-grow">
-        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-6">Rooms</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Print room data from database */}
