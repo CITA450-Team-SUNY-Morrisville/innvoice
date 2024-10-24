@@ -57,6 +57,9 @@ const Navbar = () => {
               <Link to="/dashboard" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</Link>
             </li>
             <li className="my-2">
+              <Link to="/rooms" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Rooms</Link>
+            </li>
+            <li className="my-2">
               <Link to="/signup" className="block py-2 px-4 transition-colors duration-200 ease-in-out hover:bg-gray-200 dark:hover:bg-gray-700">Signup</Link>
             </li>
             <li className="my-2">
