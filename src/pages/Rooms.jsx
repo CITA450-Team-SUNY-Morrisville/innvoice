@@ -61,6 +61,14 @@ const Rooms = () => {
     }
   };
 
+  const ShowPropertiesPopup = async () => {
+
+  }
+
+  const navigateToReservations = () => {
+    navigate("/reservations")
+  }
+
   return (
     <div className={`${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} min-h-screen flex flex-col`}>
       <Navbar />
@@ -109,6 +117,28 @@ const Rooms = () => {
                   <p>Type: {['R100', 'R150', 'R200'].includes(room.roomTypeCode) ? "Normal" : "Suite"}</p>
                   <p>Available: {room.status === 'available' ? <span className="text-green-600">(Green Light)</span> : <span className="text-red-600">(Unavailable)</span>}</p>
                 </div>
+
+                {/* Room interaction buttons */}
+                <div className="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                  {/* Edit room properties popup button */}
+                  <button
+                    className="p-4 rounded-lg shadow-lg bg-blue-600 text-white hover:bg-blue-700 transition-all"
+                    onClick={ShowPropertiesPopup}
+                  >
+                   Edit Room
+                  </button>
+
+                  {/*<br />*/}
+
+                  {/* Edit room reservation navigation button */}
+                  <button
+                    className="p-4 rounded-lg shadow-lg bg-blue-600 text-white hover:bg-blue-700 transition-all"
+                    onClick={navigateToReservations}
+                  >
+                   Edit Reservation
+                  </button>
+                </div>
+
               </div>
             ))
           ) : (

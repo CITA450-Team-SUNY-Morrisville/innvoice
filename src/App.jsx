@@ -8,6 +8,7 @@ import LoginPage from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import TestPage from './pages/ProtectedTest';
 import RoomsPage from './pages/Rooms'
+import ReservationsPage from './pages/Reservations'
 import axios from 'axios';
 import ThemeProvider from './ThemeContext';
 
@@ -28,6 +29,7 @@ function App() {
         <Route path='/home' element={<HomePage />} />  {/* Ensure this is correct */}
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/rooms' element={<RoomsPage />} />
+        <Route path='/reservations' element={<ReservationsPage />} />
         <Route path='*' element={<NotFoundPage />} /> {/* Catch-all for undefined routes */}
       </Route>
     )
